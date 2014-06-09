@@ -1,10 +1,16 @@
 class TodosController < ApplicationController
   before_action :set_todo, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo_group, only: [:show, :edit, :update, :destroy]
 
   # GET /todos
   # GET /todos.json
   def index
-    @todos = Todo.all
+    # raise params.inspect
+    Rails.logger.debug("#{params.inspect}")
+    @todo_group = TodoGroup.find(params[:todo_group_id])
+    # Rails.logger.debug("#{todo_group.inspect}")
+    @todos = @todo_group.todos
+    # @todos = Todo.all
   end
 
   # GET /todos/1
@@ -67,6 +73,10 @@ class TodosController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_todo
       @todo = Todo.find(params[:id])
+    end
+
+    def set_todo_group
+      @todo_group = TodoGroup.find(params[:todo_group_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

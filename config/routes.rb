@@ -1,18 +1,18 @@
 Todos::Application.routes.draw do
   get "welcome/index"
-  resources :todos
-  resources :todo_groups
+  # resources :todos
+  # resources :todo_groups
 
-  # resources :todo_groups do
-  #   resources :todos
-  # end
+  resources :todo_groups do
+    resources :todos
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
-  root 'todos#index'
+  root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

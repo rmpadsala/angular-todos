@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require underscore
 //= require angular
 //= require angular-resource
 //= require jquery
@@ -18,7 +19,7 @@
 //= require_self
 //= require_tree .
 
-var app = angular.module('app', ['ngResource']);
+var app = angular.module('app', ['ngResource', 'restangular']);
 
 app.config(['$httpProvider', function ($httpProvider) {
   // CSRF
