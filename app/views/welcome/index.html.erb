@@ -2,8 +2,8 @@
   <div class="col-xs-3">
     <h1>Groups</h1>
     <div class="list-group todo-group">
-      <a href="#" class="list-group-item" ng-class="{ active: g.id === group.activeGroupId }"
-        ng-repeat="g in group.groups"
+      <a href="#" class="list-group-item" ng-class="{ active: g.id === currentGroup.id }"
+        ng-repeat="g in groups"
         ng-click="setCurrentGroup($event, g)">
         {{ g.name }}
       </a>
@@ -15,17 +15,17 @@
     </div>
   </div>
 
-  <div class="col-xs-6">
+  <div class="col-xs-6" ng-controller="TodosCtrl">
     <h1>Todos</h1>
     <form ng-submit="addTodo($event)">
-      <input type="text" class="form-control" ng-model="nextTodo"
+      <input type="text" class="form-control" ng-model="nextTodo.title"
         placeholder="Add new todo...">
     </form>
 
     <div class="panel panel-default">
       <p class="todo-filters-content">
-        All: {{(activeGroupTodos).length}},
-        Completed: {{(activeGroupTodos|filter:{complete: true}).length}}
+        All: {{(todos).length}},
+        Completed: {{(todos|filter:{complete: true}).length}}
       </p>
       <div class="panel-body">
         <div class="input-group">
@@ -38,7 +38,7 @@
         <table class="table">
           <thead></thead>
           <tbody class="todos">
-            <tr ng-repeat="todo in activeGroupTodos | filter: { title: query }">
+            <tr ng-repeat="todo in todos | filter: { title: query }">
               <td ng-class="{complete: todo.complete}">
                 <input type="checkbox" ng-click="toggleComplete(todo)"
                   ng-model="todo.complete">

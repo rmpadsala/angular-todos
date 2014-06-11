@@ -2,19 +2,21 @@ app.controller('TodosCtrl', ['$scope', 'TodoResource', 'Group',
   function ($scope, TodoResource, Group) {
     $scope.group = Group;
     $scope.activeGroupId = Group.activeGroupId;
-    $scope.todos = Group.activeGroupTodos;
+    $scope.todos = [];
 
     var updateResource = function(todo) {
-      TodoResource.update(todo, function(response) {
-        todo = response;
+      console.log("Edit todo");
+      console.log(todo);
+      $scope.currentGroup.put('todos',todo).then(function(result) {
+        todo = result;
       },
       function(failure) {
-        console.log("failed");
+        console.log("failed " + failure.statusText);
       });
     }
 
     $scope.visible = function() {
-      return $scope.group.groups.length > 0;
+      return $scope.groups.length > 0;
     }
 
     $scope.toggleComplete = function(todo) {
@@ -30,47 +32,37 @@ app.controller('TodosCtrl', ['$scope', 'TodoResource', 'Group',
 
     $scope.addTodo = function(e) {
       e.preventDefault();
-      var todoToAdd = {title: $scope.nextTodo, complete: false, todo_group_id: $scope.activeGroupId };
-      console.log(todoToAdd);
-      TodoResource.save(todoToAdd, function(response) {
-        $scope.todos.unshift(response);
+      console.log($scope.nextTodo);
+      $scope.currentGroup.post('todos', $scope.nextTodo).then(function(result) {
+        $scope.todos.unshift(result);
+        $scope.nextTodo.title = "";
       });
-      $scope.nextTodo = "";
     };
 
     $scope.removeTodo = function(e, index, todo) {
       e.preventDefault();
-      TodoResource.remove({id: todo.id},
-        function(success) {
+      $scope.currentGroup.remove('todos', todo.id).then(function(success) {
           if (success.$resolved) {
             $scope.todos.splice(index, 1);
           }
         },
-  // Q: How to handle faiure case (for example resource not found) ??
         function(failure) {
           console.log("failed");
         });
     };
-
-    $scope.showTodo = function(e, todo) {
-      // TodoResource.get({id: todo.id});
-
-    }
 
     $scope.toggleEditable = function(e, todo) {
       e.preventDefault();
       todo.editable = !todo.editable;
     };
 
-  // Q: Can we watch on activeGroupId directly which is being updated in
-  // other controller
-    $scope.$watch('group', function(current, prev) {
-      if (current.activeGroupId !== prev.activeGroupId) {
-        console.log("active group changed, new: " + current.activeGroupId + ", prev: "
-          + prev.activeGroupId);
-        $scope.activeGroupId = current.activeGroupId;
-        $scope.todos = current.activeGroupTodos;
-        console.log($scope.todos);
+    $scope.$watch('currentGroup', function(current, prev) {
+      // console.log("Current group changed");
+      if (current != prev) {
+        $scope.currentGroup.getList("todos").then(function(todos) {
+         // console.log(todos);
+         $scope.todos = todos;
+        });
       }
     }, true);
 
