@@ -4,35 +4,29 @@ app.controller('TodosCtrl', ['$scope', 'TodoResource', 'Group',
     $scope.activeGroupId = Group.activeGroupId;
     $scope.todos = [];
 
-    var updateResource = function(todo) {
-      console.log("Edit todo");
-      console.log(todo);
-      $scope.currentGroup.put('todos',todo).then(function(result) {
-        todo = result;
-      },
-      function(failure) {
-        console.log("failed " + failure.statusText);
-      });
+    var updateResource = function(index, todo) {
+      $scope.todos[index].put();
     }
 
     $scope.visible = function() {
       return $scope.groups.length > 0;
     }
 
-    $scope.toggleComplete = function(todo) {
+    $scope.toggleComplete = function(index, todo) {
       todo.complete = !todo.complete;
-      updateResource(todo);
+      updateResource(index, todo);
     };
 
-    $scope.editTodo = function(e, todo) {
+    $scope.editTodo = function(e, index, todo) {
       e.preventDefault();
       todo.editable = false;
-      updateResource(todo);
+      updateResource(index, todo);
     };
 
     $scope.addTodo = function(e) {
       e.preventDefault();
       console.log($scope.nextTodo);
+      $scope.nextTodo.complete = false;
       $scope.currentGroup.post('todos', $scope.nextTodo).then(function(result) {
         $scope.todos.unshift(result);
         $scope.nextTodo.title = "";
@@ -41,14 +35,9 @@ app.controller('TodosCtrl', ['$scope', 'TodoResource', 'Group',
 
     $scope.removeTodo = function(e, index, todo) {
       e.preventDefault();
-      $scope.currentGroup.remove('todos', todo.id).then(function(success) {
-          if (success.$resolved) {
-            $scope.todos.splice(index, 1);
-          }
-        },
-        function(failure) {
-          console.log("failed");
-        });
+      $scope.todos[index].remove().then(function(success) {
+        $scope.todos.splice(index, 1);
+      });
     };
 
     $scope.toggleEditable = function(e, todo) {

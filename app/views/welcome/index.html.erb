@@ -40,10 +40,10 @@
           <tbody class="todos">
             <tr ng-repeat="todo in todos | filter: { title: query }">
               <td ng-class="{complete: todo.complete}">
-                <input type="checkbox" ng-click="toggleComplete(todo)"
+                <input type="checkbox" ng-click="toggleComplete($index, todo)"
                   ng-model="todo.complete">
 
-                <form ng-submit="editTodo($event, todo)" ng-show="todo.editable" >
+                <form ng-submit="editTodo($event, $index, todo)" ng-show="todo.editable" >
                   <input type="text" class="editable" placeholder="{{todo.title}}"
                     ng-model="todo.title">
                 </form>

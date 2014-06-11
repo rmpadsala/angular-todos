@@ -2,11 +2,10 @@ app.controller('GroupsCtrl', ['$scope', 'TodoGroupResource', 'GroupsResource',
   function($scope, TodoGroupResource, GroupsResource) {
 
     $scope.groups = [];
-    // This will query /accounts and return a promise.
+    // This will query /todo_groups and return a promise.
     GroupsResource.all('todo_groups').getList().then(function(todoGroups) {
       $scope.groups = todoGroups;
       $scope.currentGroup = $scope.groups[0];
-      console.log($scope.currentGroup);
     });
 
     $scope.addGroup = function(e) {
@@ -21,6 +20,5 @@ app.controller('GroupsCtrl', ['$scope', 'TodoGroupResource', 'GroupsResource',
     $scope.setCurrentGroup = function(e, group) {
       e.preventDefault();
       $scope.currentGroup = group;
-      // console.log($scope.currentGroup);
     };
 }]);

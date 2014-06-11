@@ -1,15 +1,14 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :edit, :update, :destroy]
-  before_action :set_todo_group, only: [:show, :edit, :update, :destroy]
+  # before_action :set_todo, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo_group, only: [:index, :create, :show, :edit, :update, :destroy]
 
   # GET /todos
   # GET /todos.json
   def index
     # raise params.inspect
     Rails.logger.debug("#{params.inspect}")
-    @todo_group = TodoGroup.find(params[:todo_group_id])
     # Rails.logger.debug("#{todo_group.inspect}")
-    @todos = @todo_group.todos
+    @todos = @group.todos
     # @todos = Todo.all
   end
 
@@ -20,7 +19,6 @@ class TodosController < ApplicationController
 
   # GET /todos/new
   def new
-    @group = TodoGroup.find(params[:todo_group_id])
     @todo = @group.todos.build
   end
 
@@ -31,7 +29,6 @@ class TodosController < ApplicationController
   # POST /todos
   # POST /todos.json
   def create
-    @group = TodoGroup.find(params[:todo_group_id])
     @todo = @group.todos.build(todo_params)
 
     respond_to do |format|
@@ -48,6 +45,7 @@ class TodosController < ApplicationController
   # PATCH/PUT /todos/1
   # PATCH/PUT /todos/1.json
   def update
+    @todo = @group.todos.find(params[:id])
     respond_to do |format|
       if @todo.update(todo_params)
         format.html { redirect_to @todo, notice: 'Todo was successfully updated.' }
@@ -62,6 +60,7 @@ class TodosController < ApplicationController
   # DELETE /todos/1
   # DELETE /todos/1.json
   def destroy
+    @todo = @group.todos.find(params[:id])
     @todo.destroy
     respond_to do |format|
       format.html { redirect_to todos_url }
@@ -76,7 +75,7 @@ class TodosController < ApplicationController
     end
 
     def set_todo_group
-      @todo_group = TodoGroup.find(params[:todo_group_id])
+      @group = TodoGroup.find(params[:todo_group_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
