@@ -1,5 +1,5 @@
-app.controller('GroupsCtrl', ['$scope', 'TodoGroupResource', 'GroupsResource',
-  function($scope, TodoGroupResource, GroupsResource) {
+app.controller('GroupsCtrl', ['$scope', 'GroupsResource',
+  function($scope, GroupsResource) {
 
     $scope.groups = [];
     // This will query /todo_groups and return a promise.

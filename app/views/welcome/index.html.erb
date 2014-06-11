@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="col-xs-6" ng-controller="TodosCtrl">
+  <div class="col-xs-6" ng-controller="TodosCtrl" ng-show="visible()">
     <h1>Todos</h1>
     <form ng-submit="addTodo($event)">
       <input type="text" class="form-control" ng-model="nextTodo.title"

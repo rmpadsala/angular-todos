@@ -1,7 +1,4 @@
-app.controller('TodosCtrl', ['$scope', 'TodoResource', 'Group',
-  function ($scope, TodoResource, Group) {
-    $scope.group = Group;
-    $scope.activeGroupId = Group.activeGroupId;
+app.controller('TodosCtrl', ['$scope', function ($scope) {
     $scope.todos = [];
 
     var updateResource = function(index, todo) {
